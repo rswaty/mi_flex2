@@ -1,0 +1,113 @@
+---
+title: "Rapid Assessment of the Forested Ecosystems of Michigan"
+output: 
+  flexdashboard::flex_dashboard:
+    storyboard: true
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+library(readr)
+library(ggplot2)
+library(dplyr)
+library(scales)
+library(DT)
+```
+
+
+
+### MI Forest Ecosystem Assessment Background
+
+The Nature Conservancy's Shared Conservation Agenda is guiding conservation change internationally, leading to substantial amounts of planning by state chapters and divisions.  The Michigan Chapter is developing Narratives, One-Page Plans and Theories of Change for multiple priorities including "Conserving Resilient Lands and Waters" and "Tackling Climate Change".  
+
+Within these priorities forests are foundational, and mentioned in the current planning documents.  Some examples include:
+
+*  "We will identify additional protection opportunities to advance:
+    *  Restoration and improved management of existing protected lands AND
+    *  Improved health of the 16M-acre forest ecosystem by increasing biodiversity, climate resilience and pest/disease resistance
+    
+    
+**From:** CRLW Conserving Resilient Lands and Waters - MI Narrative 07.2019.docx
+*  "Develop climate resilience science and protection/ management guidance and expand existing research."
+**From:** NCS Mitigation - MI Narrative 100719.docx
+
+**Introduction**
+Within the Conserving Resilient Lands and Waters strategy of the Shared Conservation Agenda, the Michigan Chapter of The Nature Conservancy has a draft goal of "Improved health of the 16M acre forest ecosystem by increasing biodiversity, climate resilience and pest/disease resistance".  Additionally, there are forest-focused goals within the Natural Climate Solutions and Living with Fire strategies. The hope here is to conduct a general rapid assessment that points to potential specific strategies and/or future planning questions.  
+
+For this "rapid assessment" the main goals (in addition to the overarching ones above) include:
+
+*  general characterization of the forests of MI, past and present 
+    * acres of main ecosystems ^1^  past and present 
+    * maps of main ecosystems past and present
+*  comparison of past and present, looking to see how much ecosystems have been converted to agricultural and urban land uses, and how they have changed to new ecosystems (e.g., northern pine ecosystem changing to more deciduous)
+*  assessment of vegetation departure for most widespread ecosystems ^2^
+*  as time permits we will explore structural issues of most widespread/important ecosystems
+
+
+
+
+
+---
+
+For this "rapid assessment" the main goals (in addition to the overarching ones above) include:
+
+*  general characterization of the forests of MI, past and present 
+    * acres of main ecosystems ^1^  past and present 
+    * maps of main ecosystems past and present
+*  comparison of past and present, looking to see how much ecosystems have been converted to agricultural and urban land uses, and how they have changed to new ecosystems (e.g., northern pine ecosystem changing to more deciduous)
+*  assessment of vegetation departure for most widespread ecosystems ^2^
+*  as time permits we will explore structural issues of most widespread/important ecosystems
+
+### Historic Ecosystems Map
+
+```{r}
+knitr::include_graphics("mi_bps.jpg")
+```
+
+
+
+---
+
+
+
+This map was made from LANDFIRE's Biophysical Settings data (from the website https://www.landfire.gov/bps.php):
+<br>
+*... represent the vegetation that may have been dominant on the landscape prior to Euro-American settlement and is based on both the current biophysical environment and an approximation of the historical disturbance regime.*
+
+*Map units are based on NatureServe's Ecological Systems classification and represent the natural plant communities that may have been present during the reference period. Each BPS map unit is matched with a model of vegetation succession, and both serve as key inputs to the LANDSUM landscape succession model. The actual time period for this data set is a composite of both the historical context provided by the fire regime and vegetation dynamics models and the more recent field and geospatial inputs used to create it.*
+
+
+###  Historic Ecosystems Charted out
+
+```{r message=FALSE, warning=FALSE}
+## read in data
+BpSForGraphs <- read_csv("BpSForGraphs.csv", 
+    col_types = cols(X1 = col_skip(), X1_1 = col_skip(), 
+        X1_2 = col_skip(), X1_3 = col_skip(), 
+        X1_4 = col_skip(), X1_5 = col_skip()))
+
+## Laura says to chop the data:
+bps_chop <- BpSForGraphs[c(1:15),]
+
+## Now make Laura's colorful chart
+top15 <- ggplot(bps_chop, aes(x = reorder(BPS_NAME, ACRES), y = ACRES, fill = BPS_NAME)) +
+
+   coord_flip() + 
+  scale_y_continuous(labels=comma) +
+  geom_col() +
+  
+  labs(title="Forested Ecosystems of Michigan-Historical Amounts", y="Acres", x="") +
+  theme(legend.position="none", 
+        plot.title = element_text(hjust = 0.5), 
+        panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank()) 
+
+ 
+top15
+
+```
+
+---
+
+Chart made by taking the top 15 Biophysical Settings Blah Blah Blah
+
