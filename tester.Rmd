@@ -12,6 +12,11 @@ library(ggplot2)
 library(dplyr)
 library(scales)
 library(DT)
+library(plotly)
+library(RColorBrewer)
+library(colorRamps)
+
+
 ```
 
 
@@ -20,30 +25,17 @@ library(DT)
 
 The Nature Conservancy's Shared Conservation Agenda is guiding conservation change internationally, leading to substantial amounts of planning by state chapters and divisions.  The Michigan Chapter is developing Narratives, One-Page Plans and Theories of Change for multiple priorities including "Conserving Resilient Lands and Waters" and "Tackling Climate Change".  
 
-Within these priorities forests are foundational, and mentioned in the current planning documents.  Some examples include:
+Within these priorities forests are foundational, and mentioned in the current planning documents.  Some example actions include:
 
 *  "We will identify additional protection opportunities to advance:
     *  Restoration and improved management of existing protected lands AND
     *  Improved health of the 16M-acre forest ecosystem by increasing biodiversity, climate resilience and pest/disease resistance
-    
-    
-**From:** CRLW Conserving Resilient Lands and Waters - MI Narrative 07.2019.docx
-*  "Develop climate resilience science and protection/ management guidance and expand existing research."
-**From:** NCS Mitigation - MI Narrative 100719.docx
 
-**Introduction**
+    
+*From:* CRLW Conserving Resilient Lands and Waters - MI Narrative 07.2019.docx
+
+
 Within the Conserving Resilient Lands and Waters strategy of the Shared Conservation Agenda, the Michigan Chapter of The Nature Conservancy has a draft goal of "Improved health of the 16M acre forest ecosystem by increasing biodiversity, climate resilience and pest/disease resistance".  Additionally, there are forest-focused goals within the Natural Climate Solutions and Living with Fire strategies. The hope here is to conduct a general rapid assessment that points to potential specific strategies and/or future planning questions.  
-
-For this "rapid assessment" the main goals (in addition to the overarching ones above) include:
-
-*  general characterization of the forests of MI, past and present 
-    * acres of main ecosystems ^1^  past and present 
-    * maps of main ecosystems past and present
-*  comparison of past and present, looking to see how much ecosystems have been converted to agricultural and urban land uses, and how they have changed to new ecosystems (e.g., northern pine ecosystem changing to more deciduous)
-*  assessment of vegetation departure for most widespread ecosystems ^2^
-*  as time permits we will explore structural issues of most widespread/important ecosystems
-
-
 
 
 
@@ -72,6 +64,7 @@ knitr::include_graphics("mi_bps.jpg")
 
 This map was made from LANDFIRE's Biophysical Settings data (from the website https://www.landfire.gov/bps.php):
 <br>
+<br>
 *... represent the vegetation that may have been dominant on the landscape prior to Euro-American settlement and is based on both the current biophysical environment and an approximation of the historical disturbance regime.*
 
 *Map units are based on NatureServe's Ecological Systems classification and represent the natural plant communities that may have been present during the reference period. Each BPS map unit is matched with a model of vegetation succession, and both serve as key inputs to the LANDSUM landscape succession model. The actual time period for this data set is a composite of both the historical context provided by the fire regime and vegetation dynamics models and the more recent field and geospatial inputs used to create it.*
@@ -89,13 +82,18 @@ BpSForGraphs <- read_csv("BpSForGraphs.csv",
 ## Laura says to chop the data:
 bps_chop <- BpSForGraphs[c(1:15),]
 
+## color pallete
+
+colourCount <- length(unique(bps_chop$BPS_NAME))
+getPalette <- colorRampPalette(brewer.pal(9, "PRGn"))
+
 ## Now make Laura's colorful chart
 top15 <- ggplot(bps_chop, aes(x = reorder(BPS_NAME, ACRES), y = ACRES, fill = BPS_NAME)) +
 
-   coord_flip() + 
+  coord_flip() + 
   scale_y_continuous(labels=comma) +
   geom_col() +
-  
+  scale_fill_manual(values = colorRampPalette(brewer.pal(12,                                                                  "Accent"))(colourCount))  + 
   labs(title="Forested Ecosystems of Michigan-Historical Amounts", y="Acres", x="") +
   theme(legend.position="none", 
         plot.title = element_text(hjust = 0.5), 
@@ -103,11 +101,32 @@ top15 <- ggplot(bps_chop, aes(x = reorder(BPS_NAME, ACRES), y = ACRES, fill = BP
         panel.grid.minor = element_blank()) 
 
  
+top15 <- ggplotly(top15)
+
 top15
 
 ```
 
 ---
 
-Chart made by taking the top 15 Biophysical Settings Blah Blah Blah
+Chart made by taking the top 15 Forest (as definted in the attribute table) Biophysical Settings.  This was done to "filter out" noise, i.e. BpSs with limited representation. 
+
+###  Current Ecosystems Map
+
+
+```{r}
+knitr::include_graphics("mi_evt.jpg")
+```
+
+
+
+---
+
+
+
+This map was made from *selected* remaining natural LANDFIRE's 2014 Existing Vegetation Types (from the website https://https://www.landfire.gov/evt.php):
+<br>
+<br>
+*...represents the current distribution of the terrestrial ecological systems classification, developed by NatureServe for the western hemisphere, through 2016. A terrestrial ecological system is defined as a group of plant community types (associations) that tend to co-occur within landscapes with similar ecological processes, substrates, and/or environmental gradients.*
+
 
