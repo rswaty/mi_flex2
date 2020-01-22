@@ -1,8 +1,9 @@
 ---
-title: "Rapid Assessment of the Forested Ecosystems of Michigan"
+title: "Rapid Assessment of the Forested Ecosystems of Michigan by Randy Swaty and Laura Slavsky"
 output: 
   flexdashboard::flex_dashboard:
     storyboard: true
+    theme: spacelab
 ---
 
 ```{r setup, include=FALSE}
@@ -15,14 +16,24 @@ library(DT)
 library(plotly)
 library(RColorBrewer)
 library(colorRamps)
+library(treemap)
+library(tidyverse)
+library(sunburstR)
 
 
 ```
 
-
+**THIS DASHBOARD IS FOR PROOF OF CONCEPT.  MAPS HAVE NOT BEEN QA/QC'd, legends may not match.  PATTERNS ARE INDICATIVE THOUGH.  
 
 ### MI Forest Ecosystem Assessment Background
 
+
+
+
+```{r, out.width= "45%", out.extra='style="float:right; padding:10px"'}
+knitr::include_graphics("mi_vdep.jpg")
+```
+ <br>
 The Nature Conservancy's Shared Conservation Agenda is guiding conservation change internationally, leading to substantial amounts of planning by state chapters and divisions.  The Michigan Chapter is developing Narratives, One-Page Plans and Theories of Change for multiple priorities including "Conserving Resilient Lands and Waters" and "Tackling Climate Change".  
 
 Within these priorities forests are foundational, and mentioned in the current planning documents.  Some example actions include:
@@ -36,7 +47,10 @@ Within these priorities forests are foundational, and mentioned in the current p
 
 
 Within the Conserving Resilient Lands and Waters strategy of the Shared Conservation Agenda, the Michigan Chapter of The Nature Conservancy has a draft goal of "Improved health of the 16M acre forest ecosystem by increasing biodiversity, climate resilience and pest/disease resistance".  Additionally, there are forest-focused goals within the Natural Climate Solutions and Living with Fire strategies. The hope here is to conduct a general rapid assessment that points to potential specific strategies and/or future planning questions.  
-
+<br>
+<br>
+<br>
+This regional map represents LANDFIRE's Vegetation Departure data.  The darker greens indicate areas that are closest to modeled "reference" conditions.
 
 
 ---
@@ -70,7 +84,7 @@ This map was made from LANDFIRE's Biophysical Settings data (from the website ht
 *Map units are based on NatureServe's Ecological Systems classification and represent the natural plant communities that may have been present during the reference period. Each BPS map unit is matched with a model of vegetation succession, and both serve as key inputs to the LANDSUM landscape succession model. The actual time period for this data set is a composite of both the historical context provided by the fire regime and vegetation dynamics models and the more recent field and geospatial inputs used to create it.*
 
 
-###  Historic Ecosystems Charted out
+###  Chart of Historic Ecosystems
 
 ```{r message=FALSE, warning=FALSE}
 ## read in data
@@ -88,7 +102,7 @@ colourCount <- length(unique(bps_chop$BPS_NAME))
 getPalette <- colorRampPalette(brewer.pal(9, "PRGn"))
 
 ## Now make Laura's colorful chart
-top15 <- ggplot(bps_chop, aes(x = reorder(BPS_NAME, ACRES), y = ACRES, fill = BPS_NAME)) +
+top15bps <- ggplot(bps_chop, aes(x = reorder(BPS_NAME, ACRES), y = ACRES, fill = BPS_NAME)) +
 
   coord_flip() + 
   scale_y_continuous(labels=comma) +
@@ -101,9 +115,9 @@ top15 <- ggplot(bps_chop, aes(x = reorder(BPS_NAME, ACRES), y = ACRES, fill = BP
         panel.grid.minor = element_blank()) 
 
  
-top15 <- ggplotly(top15)
+top15bps <- ggplotly(top15bps)
 
-top15
+top15bps
 
 ```
 
@@ -130,3 +144,60 @@ This map was made from *selected* remaining natural LANDFIRE's 2014 Existing Veg
 *...represents the current distribution of the terrestrial ecological systems classification, developed by NatureServe for the western hemisphere, through 2016. A terrestrial ecological system is defined as a group of plant community types (associations) that tend to co-occur within landscapes with similar ecological processes, substrates, and/or environmental gradients.*
 
 
+
+
+### Chart of Current Ecosystems
+
+```{r}
+EVT_NatForGraphs <- read_csv("EVT_NatForGraphs.csv")
+
+EVTnatArranged <- arrange(EVT_NatForGraphs, desc(ACRES))
+
+evt_chop <- EVTnatArranged[c(1:15),]
+```
+
+
+```{r}
+
+
+colourCount2 <- length(unique(evt_chop$EVT_NAME))
+getPalette2 <- colorRampPalette(brewer.pal(9, "PRGn"))
+
+top15EVTs <-
+  ggplot(evt_chop, aes(x = reorder(EVT_NAME, ACRES), y = ACRES, fill = EVT_NAME)) + ###
+  geom_col() +
+  coord_flip() + 
+  scale_y_continuous(labels=comma) +
+  scale_fill_manual(values = colorRampPalette(brewer.pal(12,                                                                  "Accent"))(colourCount2))  + 
+  labs(title="Forested Ecosystems of Michigan-Current Amounts", y="Acres", x="") +
+  theme(legend.position="none", 
+        plot.title = element_text(hjust = 0.5), 
+        panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank()) 
+
+
+top15EVTs <- ggplotly(top15EVTs)
+
+top15EVTs
+
+```
+
+---
+
+Chart made by taking the top 15 Forest (as definted in the attribute table) "natural" (i.e., not converted to agricultural or urban land uses) Existing Vegetation Types.  This was done to "filter out" noise, i.e. EVTs with limited representation. 
+
+
+### Change
+
+```{r}
+bps2evt <- read_csv("bps2evt4SB.csv")
+
+SBBpstoEvt <- sunburst(bps2evt, legend=FALSE, width="100%", colors = list(range = RColorBrewer::brewer.pal(11, "BrBG")))
+
+SBBpstoEvt
+```
+
+
+---
+
+This sunburst chart
