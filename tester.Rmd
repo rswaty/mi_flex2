@@ -138,7 +138,7 @@ knitr::include_graphics("mi_evt.jpg")
 
 
 
-This map was made from *selected* remaining natural LANDFIRE's 2014 Existing Vegetation Types (from the website https://https://www.landfire.gov/evt.php):
+This map was made from selected remaining natural LANDFIRE's 2014 Existing Vegetation Types (from the website https://https://www.landfire.gov/evt.php):
 <br>
 <br>
 *...represents the current distribution of the terrestrial ecological systems classification, developed by NatureServe for the western hemisphere, through 2016. A terrestrial ecological system is defined as a group of plant community types (associations) that tend to co-occur within landscapes with similar ecological processes, substrates, and/or environmental gradients.*
@@ -200,4 +200,43 @@ SBBpstoEvt
 
 ---
 
-This sunburst chart
+
+
+Comparing historic ecosystem groups to current
+
+
+Visualizing changes over time can be done in many ways. Here, we decided to try a style of chart that may be new to you -- a sunburst chart. Please allow us to describe how to interpret it, and have fun interacting with it to make your own observations! 
+
+It is important to note that the inner and outer ring both are equal to 100%. Therefore, the visual size of sections isn't completely accurate due to one ring being bigger than the other. Hovering over a section of the inner ring shows the percentage of historical vegetation composition, and hovering over the outer ring shows the inner percentage followed by the current percentage. 
+
+Example: 
+
+Historically, hardwood forest composed 53.8% of the vegetation in Michigan (inner ring). Now, those same areas are 20.0% (outer ring). This does not mean there is only 20.0% hardwoods left - if you hover on the outside ring to any section with the same shade as hardwood, you'll see that some other historical vegetation types are now hardwood as well (see the 6.22% Hardwood section of the outer ring from Hardwood Conifer, or the 2.96% Hardwood in the outer ring from historically Conifer, for example). Historically, Hardwood was (53.8%). Currently, if you add up all hardwoods from the outer ring, it is (30.9%).
+
+
+
+### Michigamme Highlands
+
+
+
+```{r}
+knitr::include_graphics("mh_comp.jpg")
+```
+
+---
+The Michigamme Highlands are a focal area for the Michigan Chapter.  Here we have 3 illustrative maps showcasing Existing Vegetation Cover, Height and Type datasets from 2014.  Importantly, LANDFIRE has remapped these attributes, but we were unable to process at this time (Jan 2020).  
+
+
+### What's Next?
+
+This dashboard was developed to prompt discussion about how best to leverage LANDFIRE, other datasets, Randy and Laura's time in order to get a rapid assessment of Michigan's forested ecosystems completed in a reasonable amount of time.
+
+Suggested next steps include:
+1.  Redoing GIS work to base maps and charts of LANDFIRE ReMap data
+2.  Explore "value-added" processing, e.g., mapping areas where northern hardwoods sites have been converted and/or have unnatural height/cover combinations.
+3.  Add in Resilient and Connected Sites data, probably in combination with ecosystems of interest to highlight areas of high connectivity/restoration need.
+4. Calculate Vegetation Depature, highlighting under/over represented succession classes.  See "Vegetation Departure" section (especially the interactive graph)   of an assessment conducted for the Ottawa National Forest. https://randy-swaty.shinyapps.io/OttawaAssessment/
+
+
+
+
