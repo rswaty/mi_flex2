@@ -19,7 +19,9 @@ library(colorRamps)
 library(treemap)
 library(tidyverse)
 library(sunburstR)
-
+library(igraph)
+library(chorddiag)
+library(tidygraph)
 
 ```
 
@@ -192,7 +194,7 @@ Chart made by taking the top 15 Forest (as definted in the attribute table) "nat
 ```{r}
 bps2evt <- read_csv("bps2evt4SB.csv")
 
-SBBpstoEvt <- sunburst(bps2evt, legend=FALSE, width="100%", colors = list(range = RColorBrewer::brewer.pal(11, "BrBG")))
+SBBpstoEvt <- sunburst(bps2evt, legend=FALSE, width="100%", colors = list(range = RColorBrewer::brewer.pal(8, "PRGn")))
 
 SBBpstoEvt
 ```
@@ -215,6 +217,45 @@ Historically, hardwood forest composed 53.8% of the vegetation in Michigan (inne
 
 
 
+### More Change
+
+```{r}
+bps2evt2 <- read_csv("bps2evt2.csv")
+
+bps2evtMatrix<-as.matrix(as_adjacency_matrix(as_tbl_graph(bps2evt2),attr = "acres"))
+
+bps2evtMatrix = subset(bps2evtMatrix, select = -c(1,2,3,4,5,6))
+
+bps2evtMatrix2 <- bps2evtMatrix[-c(7,8,9,10,11,12),]
+
+groupColors <- c("#F26223", "#6c9174", "#957244", "#F26223", "#204a3e", "#97abad")
+
+chord<-chorddiag(data = bps2evtMatrix2,
+                 type = "bipartite",
+                 groupColors = groupColors,
+                 groupnamePadding = 10,
+                 groupPadding = 3,
+                 groupnameFontsize = 10 ,
+                 showTicks = FALSE,
+                 margin=150,
+                 tooltipGroupConnector = "    &#x25B6;    ",
+                 chordedgeColor = "#B3B6B7"
+)
+chord
+
+
+```
+
+
+
+
+---
+
+Looking at LANDFIRE's Groupveg attributes for BpS and EVT datasets.
+
+
+
+
 ### Michigamme Highlands
 
 
@@ -223,20 +264,10 @@ Historically, hardwood forest composed 53.8% of the vegetation in Michigan (inne
 knitr::include_graphics("mh_comp.jpg")
 ```
 
+
+
 ---
 The Michigamme Highlands are a focal area for the Michigan Chapter.  Here we have 3 illustrative maps showcasing Existing Vegetation Cover, Height and Type datasets from 2014.  Importantly, LANDFIRE has remapped these attributes, but we were unable to process at this time (Jan 2020).  
 
-
-### What's Next?
-
-This dashboard was developed to prompt discussion about how best to leverage LANDFIRE, other datasets, Randy and Laura's time in order to get a rapid assessment of Michigan's forested ecosystems completed in a reasonable amount of time.
-
-Suggested next steps include:
-1.  Redoing GIS work to base maps and charts of LANDFIRE ReMap data
-2.  Explore "value-added" processing, e.g., mapping areas where northern hardwoods sites have been converted and/or have unnatural height/cover combinations.
-3.  Add in Resilient and Connected Sites data, probably in combination with ecosystems of interest to highlight areas of high connectivity/restoration need.
-4. Calculate Vegetation Depature, highlighting under/over represented succession classes.  See "Vegetation Departure" section (especially the interactive graph)   of an assessment conducted for the Ottawa National Forest. https://randy-swaty.shinyapps.io/OttawaAssessment/
-
-
-
+There are ~6k acres of plantations in the Michigamme Highland, most of which are 10-25M, with canopy closure of 60-70%.
 
