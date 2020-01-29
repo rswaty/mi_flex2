@@ -1,0 +1,43 @@
+root,group,subgroup,value
+Root,Yellow Birch-Sugar Maple Forest, >= 10 and < 20%,555.666
+Root,Aspen-Birch Forest, >= 40 and < 50%,592.074
+Root,Spruce-Fir-Hardwood Forest, >= 40 and < 50%,691.308
+Root,Pine-Hemlock-Hardwood Forest, >= 90 and <= 100%,702.186
+Root,Jack Pine Forest, >= 50 and < 60%,812.742
+Root,Peatland Forests, >= 20 and < 30%,825.396
+Root,Swamp Forests, >= 40 and < 50%,860.472
+Root,Aspen-Birch Forest, >= 50 and < 60%,928.404
+Root,Pine-Hemlock-Hardwood Forest, >= 40 and < 50%,930.402
+Root,Peatland Forests, >= 80 and < 90%,1046.064
+Root,Jack Pine Forest, >= 60 and < 70%,1080.696
+Root,Spruce-Fir-Hardwood Forest, >= 30 and < 40%,1089.354
+Root,Pine-Hemlock-Hardwood Forest, >= 50 and < 60%,1138.416
+Root,Spruce-Fir-Hardwood Forest, >= 50 and < 60%,1363.302
+Root,Yellow Birch-Sugar Maple Forest, >= 20 and < 30%,1374.846
+Root,Spruce-Fir-Hardwood Forest, >= 80 and < 90%,1378.62
+Root,Swamp Forests, >= 80 and < 90%,1387.056
+Root,Peatland Forests, >= 30 and < 40%,1423.02
+Root,Aspen-Birch Forest, >= 80 and < 90%,2404.926
+Root,Yellow Birch-Sugar Maple Forest, >= 30 and < 40%,2553.444
+Root,Jack Pine Forest, >= 30 and < 40%,2691.306
+Root,Peatland Forests, >= 40 and < 50%,2796.978
+Root,Swamp Forests, >= 50 and < 60%,3241.2
+Root,Aspen-Birch Forest, >= 60 and < 70%,3316.458
+Root,Pine-Hemlock-Hardwood Forest, >= 60 and < 70%,3398.82
+Root,Yellow Birch-Sugar Maple Forest, >= 40 and < 50%,3423.906
+Root,Yellow Birch-Sugar Maple Forest, >= 90 and <= 100%,3690.972
+Root,Managed Tree Plantation, >= 60 and < 70%,5052.054
+Root,Yellow Birch-Sugar Maple Forest, >= 50 and < 60%,5193.024
+Root,Peatland Forests, >= 70 and < 80%,5517.588
+Root,Peatland Forests, >= 50 and < 60%,7691.634
+Root,Peatland Forests, >= 60 and < 70%,8850.252
+Root,Swamp Forests, >= 70 and < 80%,9680.754
+Root,Spruce-Fir-Hardwood Forest, >= 60 and < 70%,9978.678
+Root,Pine-Hemlock-Hardwood Forest, >= 80 and < 90%,11120.202
+Root,Swamp Forests, >= 60 and < 70%,11345.976
+Root,Yellow Birch-Sugar Maple Forest, >= 60 and < 70%,14605.158
+Root,Aspen-Birch Forest, >= 70 and < 80%,18933.492
+Root,Spruce-Fir-Hardwood Forest, >= 70 and < 80%,20889.312
+Root,Pine-Hemlock-Hardwood Forest, >= 70 and < 80%,51013.158
+Root,Yellow Birch-Sugar Maple Forest, >= 80 and < 90%,69894.48
+Root,Yellow Birch-Sugar Maple Forest, >= 70 and < 80%,148451.844

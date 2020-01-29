@@ -1,8 +1,9 @@
 ---
-title: "Rapid Assessment of the Forested Ecosystems of Michigan"
+title: "Rapid Assessment of the Forested Ecosystems of Michigan by Randy Swaty and Laura Slavsky"
 output: 
   flexdashboard::flex_dashboard:
     storyboard: true
+    theme: spacelab
 ---
 
 ```{r setup, include=FALSE}
@@ -12,39 +13,46 @@ library(ggplot2)
 library(dplyr)
 library(scales)
 library(DT)
+library(plotly)
+library(RColorBrewer)
+library(colorRamps)
+library(treemap)
+library(tidyverse)
+library(sunburstR)
+library(igraph)
+library(chorddiag)
+library(tidygraph)
+
 ```
 
-
+**THIS DASHBOARD IS FOR PROOF OF CONCEPT.  MAPS HAVE NOT BEEN QA/QC'd, legends may not match.  PATTERNS ARE INDICATIVE THOUGH.  
 
 ### MI Forest Ecosystem Assessment Background
 
+
+
+
+```{r, out.width= "45%", out.extra='style="float:right; padding:10px"'}
+knitr::include_graphics("mi_vdep.jpg")
+```
+ <br>
 The Nature Conservancy's Shared Conservation Agenda is guiding conservation change internationally, leading to substantial amounts of planning by state chapters and divisions.  The Michigan Chapter is developing Narratives, One-Page Plans and Theories of Change for multiple priorities including "Conserving Resilient Lands and Waters" and "Tackling Climate Change".  
 
-Within these priorities forests are foundational, and mentioned in the current planning documents.  Some examples include:
+Within these priorities forests are foundational, and mentioned in the current planning documents.  Some example actions include:
 
 *  "We will identify additional protection opportunities to advance:
     *  Restoration and improved management of existing protected lands AND
     *  Improved health of the 16M-acre forest ecosystem by increasing biodiversity, climate resilience and pest/disease resistance
-    
-    
-**From:** CRLW Conserving Resilient Lands and Waters - MI Narrative 07.2019.docx
-*  "Develop climate resilience science and protection/ management guidance and expand existing research."
-**From:** NCS Mitigation - MI Narrative 100719.docx
 
-**Introduction**
+    
+*From:* CRLW Conserving Resilient Lands and Waters - MI Narrative 07.2019.docx
+
+
 Within the Conserving Resilient Lands and Waters strategy of the Shared Conservation Agenda, the Michigan Chapter of The Nature Conservancy has a draft goal of "Improved health of the 16M acre forest ecosystem by increasing biodiversity, climate resilience and pest/disease resistance".  Additionally, there are forest-focused goals within the Natural Climate Solutions and Living with Fire strategies. The hope here is to conduct a general rapid assessment that points to potential specific strategies and/or future planning questions.  
-
-For this "rapid assessment" the main goals (in addition to the overarching ones above) include:
-
-*  general characterization of the forests of MI, past and present 
-    * acres of main ecosystems ^1^  past and present 
-    * maps of main ecosystems past and present
-*  comparison of past and present, looking to see how much ecosystems have been converted to agricultural and urban land uses, and how they have changed to new ecosystems (e.g., northern pine ecosystem changing to more deciduous)
-*  assessment of vegetation departure for most widespread ecosystems ^2^
-*  as time permits we will explore structural issues of most widespread/important ecosystems
-
-
-
+<br>
+<br>
+<br>
+This regional map represents LANDFIRE's Vegetation Departure data.  The darker greens indicate areas that are closest to modeled "reference" conditions.
 
 
 ---
@@ -72,12 +80,13 @@ knitr::include_graphics("mi_bps.jpg")
 
 This map was made from LANDFIRE's Biophysical Settings data (from the website https://www.landfire.gov/bps.php):
 <br>
+<br>
 *... represent the vegetation that may have been dominant on the landscape prior to Euro-American settlement and is based on both the current biophysical environment and an approximation of the historical disturbance regime.*
 
 *Map units are based on NatureServe's Ecological Systems classification and represent the natural plant communities that may have been present during the reference period. Each BPS map unit is matched with a model of vegetation succession, and both serve as key inputs to the LANDSUM landscape succession model. The actual time period for this data set is a composite of both the historical context provided by the fire regime and vegetation dynamics models and the more recent field and geospatial inputs used to create it.*
 
 
-###  Historic Ecosystems Charted out
+###  Chart of Historic Ecosystems
 
 ```{r message=FALSE, warning=FALSE}
 ## read in data
@@ -89,13 +98,18 @@ BpSForGraphs <- read_csv("BpSForGraphs.csv",
 ## Laura says to chop the data:
 bps_chop <- BpSForGraphs[c(1:15),]
 
-## Now make Laura's colorful chart
-top15 <- ggplot(bps_chop, aes(x = reorder(BPS_NAME, ACRES), y = ACRES, fill = BPS_NAME)) +
+## color pallete
 
-   coord_flip() + 
+colourCount <- length(unique(bps_chop$BPS_NAME))
+getPalette <- colorRampPalette(brewer.pal(9, "PRGn"))
+
+## Now make Laura's colorful chart
+top15bps <- ggplot(bps_chop, aes(x = reorder(BPS_NAME, ACRES), y = ACRES, fill = BPS_NAME)) +
+
+  coord_flip() + 
   scale_y_continuous(labels=comma) +
   geom_col() +
-  
+  scale_fill_manual(values = colorRampPalette(brewer.pal(12,                                                                  "Accent"))(colourCount))  + 
   labs(title="Forested Ecosystems of Michigan-Historical Amounts", y="Acres", x="") +
   theme(legend.position="none", 
         plot.title = element_text(hjust = 0.5), 
@@ -103,11 +117,157 @@ top15 <- ggplot(bps_chop, aes(x = reorder(BPS_NAME, ACRES), y = ACRES, fill = BP
         panel.grid.minor = element_blank()) 
 
  
-top15
+top15bps <- ggplotly(top15bps)
+
+top15bps
 
 ```
 
 ---
 
-Chart made by taking the top 15 Biophysical Settings Blah Blah Blah
+Chart made by taking the top 15 Forest (as definted in the attribute table) Biophysical Settings.  This was done to "filter out" noise, i.e. BpSs with limited representation. 
+
+###  Current Ecosystems Map
+
+
+```{r}
+knitr::include_graphics("mi_evt.jpg")
+```
+
+
+
+---
+
+
+
+This map was made from selected remaining natural LANDFIRE's 2014 Existing Vegetation Types (from the website https://https://www.landfire.gov/evt.php):
+<br>
+<br>
+*...represents the current distribution of the terrestrial ecological systems classification, developed by NatureServe for the western hemisphere, through 2016. A terrestrial ecological system is defined as a group of plant community types (associations) that tend to co-occur within landscapes with similar ecological processes, substrates, and/or environmental gradients.*
+
+
+
+
+### Chart of Current Ecosystems
+
+```{r}
+EVT_NatForGraphs <- read_csv("EVT_NatForGraphs.csv")
+
+EVTnatArranged <- arrange(EVT_NatForGraphs, desc(ACRES))
+
+evt_chop <- EVTnatArranged[c(1:15),]
+```
+
+
+```{r}
+
+
+colourCount2 <- length(unique(evt_chop$EVT_NAME))
+getPalette2 <- colorRampPalette(brewer.pal(9, "PRGn"))
+
+top15EVTs <-
+  ggplot(evt_chop, aes(x = reorder(EVT_NAME, ACRES), y = ACRES, fill = EVT_NAME)) + ###
+  geom_col() +
+  coord_flip() + 
+  scale_y_continuous(labels=comma) +
+  scale_fill_manual(values = colorRampPalette(brewer.pal(12,                                                                  "Accent"))(colourCount2))  + 
+  labs(title="Forested Ecosystems of Michigan-Current Amounts", y="Acres", x="") +
+  theme(legend.position="none", 
+        plot.title = element_text(hjust = 0.5), 
+        panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank()) 
+
+
+top15EVTs <- ggplotly(top15EVTs)
+
+top15EVTs
+
+```
+
+---
+
+Chart made by taking the top 15 Forest (as definted in the attribute table) "natural" (i.e., not converted to agricultural or urban land uses) Existing Vegetation Types.  This was done to "filter out" noise, i.e. EVTs with limited representation. 
+
+
+### Change
+
+```{r}
+bps2evt <- read_csv("bps2evt4SB.csv")
+
+SBBpstoEvt <- sunburst(bps2evt, legend=FALSE, width="100%", colors = list(range = RColorBrewer::brewer.pal(8, "PRGn")))
+
+SBBpstoEvt
+```
+
+
+---
+
+
+
+Comparing historic ecosystem groups to current
+
+
+Visualizing changes over time can be done in many ways. Here, we decided to try a style of chart that may be new to you -- a sunburst chart. Please allow us to describe how to interpret it, and have fun interacting with it to make your own observations! 
+
+It is important to note that the inner and outer ring both are equal to 100%. Therefore, the visual size of sections isn't completely accurate due to one ring being bigger than the other. Hovering over a section of the inner ring shows the percentage of historical vegetation composition, and hovering over the outer ring shows the inner percentage followed by the current percentage. 
+
+Example: 
+
+Historically, hardwood forest composed 53.8% of the vegetation in Michigan (inner ring). Now, those same areas are 20.0% (outer ring). This does not mean there is only 20.0% hardwoods left - if you hover on the outside ring to any section with the same shade as hardwood, you'll see that some other historical vegetation types are now hardwood as well (see the 6.22% Hardwood section of the outer ring from Hardwood Conifer, or the 2.96% Hardwood in the outer ring from historically Conifer, for example). Historically, Hardwood was (53.8%). Currently, if you add up all hardwoods from the outer ring, it is (30.9%).
+
+
+
+### More Change
+
+```{r}
+bps2evt2 <- read_csv("bps2evt2.csv")
+
+bps2evtMatrix<-as.matrix(as_adjacency_matrix(as_tbl_graph(bps2evt2),attr = "acres"))
+
+bps2evtMatrix = subset(bps2evtMatrix, select = -c(1,2,3,4,5,6))
+
+bps2evtMatrix2 <- bps2evtMatrix[-c(7,8,9,10,11,12),]
+
+groupColors <- c("#F26223", "#6c9174", "#957244", "#F26223", "#204a3e", "#97abad")
+
+chord<-chorddiag(data = bps2evtMatrix2,
+                 type = "bipartite",
+                 groupColors = groupColors,
+                 groupnamePadding = 10,
+                 groupPadding = 3,
+                 groupnameFontsize = 10 ,
+                 showTicks = FALSE,
+                 margin=150,
+                 tooltipGroupConnector = "    &#x25B6;    ",
+                 chordedgeColor = "#B3B6B7"
+)
+chord
+
+
+```
+
+
+
+
+---
+
+Looking at LANDFIRE's Groupveg attributes for BpS and EVT datasets.
+
+
+
+
+### Michigamme Highlands
+
+
+
+```{r}
+knitr::include_graphics("mh_comp.jpg")
+```
+
+
+
+---
+The Michigamme Highlands are a focal area for the Michigan Chapter.  Here we have 3 illustrative maps showcasing Existing Vegetation Cover, Height and Type datasets from 2014.  Importantly, LANDFIRE has remapped these attributes, but we were unable to process at this time (Jan 2020).  
+
+There are ~6k acres of plantations in the Michigamme Highland, most of which are 10-25M, with canopy closure of 60-70%.
 
