@@ -237,7 +237,7 @@ chord<-chorddiag(data = bps2evtMatrix2,
                  groupPadding = 3,
                  groupnameFontsize = 10 ,
                  showTicks = FALSE,
-                 margin=150,
+                 margin=100,
                  tooltipGroupConnector = "    &#x25B6;    ",
                  chordedgeColor = "#B3B6B7"
 )
