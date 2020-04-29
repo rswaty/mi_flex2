@@ -1,0 +1,17 @@
+group,subgroup,acres
+Forest Height 0 to 5 meters,Tree Cover >= 20 and < 30%,3.774
+Forest Height 0 to 5 meters,Tree Cover >= 30 and < 40%,0.888
+Forest Height 0 to 5 meters,Tree Cover >= 40 and < 50%,0.222
+Forest Height 5 to 10 meters,Tree Cover >= 20 and < 30%,305.916
+Forest Height 5 to 10 meters,Tree Cover >= 40 and < 50%,100.122
+Forest Height 5 to 10 meters,Tree Cover >= 30 and < 40%,21.534
+Forest Height 5 to 10 meters,Tree Cover >= 10 and < 20%,4.662
+Forest Height 10 to 25 meters,Tree Cover >= 60 and < 70%,5052.054
+Forest Height 10 to 25 meters,Tree Cover >= 50 and < 60%,467.976
+Forest Height 10 to 25 meters,Tree Cover >= 40 and < 50%,391.83
+Forest Height 10 to 25 meters,Tree Cover >= 30 and < 40%,367.41
+Forest Height 10 to 25 meters,Tree Cover >= 70 and < 80%,260.184
+Forest Height 10 to 25 meters,Tree Cover >= 20 and < 30%,82.14
+Forest Height 10 to 25 meters,Tree Cover >= 80 and < 90%,46.176
+Forest Height 10 to 25 meters,Tree Cover >= 90 and <= 100%,6.882
+Forest Height 10 to 25 meters,Tree Cover >= 10 and < 20%,0.666
