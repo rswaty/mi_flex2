@@ -261,7 +261,7 @@ Looking at LANDFIRE's Groupveg attributes for BpS and EVT datasets.
 
 
 ```{r}
-knitr::include_graphics("mh_comp.jpg")
+#knitr::include_graphics("mh_comp.jpg")
 ```
 
 
