@@ -1,0 +1,56 @@
+---
+title: "Forest Height-Cover Combinations for the MH"
+author: "Randy Swaty"
+date: "2/21/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+### Visual exploration of vegetation height and cover for the Michigamme Highlands
+
+I used LANDFIRE 2014 data to make this quick sankey diagram that basically shows how much of the area is classified as trees 10-25m, with canopy closure of less than 70%.  This is not split by ecosystems (yet).  To me there is an uncharacteristic amount of canopy < 70%, which presents an opportunity.
+
+Hover over segments to highlight patterns.
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, fig.width=12}
+
+
+library(networkD3)
+library(dplyr)
+library(readr)
+
+
+links <- read_csv("mh_plantations2.csv")
+
+nodes <- data.frame(
+  name=c(as.character(links$source), 
+         as.character(links$target)) %>% unique()
+)
+
+nodes <- data.frame(
+  name=c(as.character(links$source), 
+         as.character(links$target)) %>% unique()
+)
+
+
+links$IDsource <- match(links$source, nodes$name)-1 
+links$IDtarget <- match(links$target, nodes$name)-1
+
+# Make the Network
+p <- sankeyNetwork(Links = links, 
+                   Nodes = nodes,
+                   Source = "IDsource", 
+                   Target = "IDtarget",
+                   Value = "value", 
+                   NodeID = "name", 
+                   sinksRight=FALSE,
+                   fontSize = 14)
+
+p
+```
+

@@ -2,6 +2,7 @@
 
 library(networkD3)
 library(dplyr)
+library(readr)
 
 
 sizingPolicy(viewer.suppress = TRUE,

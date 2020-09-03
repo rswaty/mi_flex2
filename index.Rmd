@@ -1,0 +1,7 @@
+---
+title: "index"
+author: "Randy Swaty"
+date: "4/29/2020"
+output: html_document
+---
+how does github know I want to publish the dash?
