@@ -1,0 +1,7 @@
+---
+title: "index"
+author: "Randy Swaty"
+date: "9/3/2020"
+output: html_document
+---
+<html><body><p>Hello World</p></body></html>
